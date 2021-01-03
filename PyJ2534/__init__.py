@@ -21,5 +21,5 @@ _platform = platform.architecture()[1].lower()
 if 'win' not in _platform:
     raise RuntimeError('PyJ2534 currently only supports Windows')
 
-from .dll import *
+from .dll import get_interfaces, load_interface
 from .define import *
