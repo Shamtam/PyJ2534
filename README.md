@@ -48,5 +48,5 @@ c_ulong(3)
 # Thanks
 Thanks to @keenanlaws and @kekelele for their initial implementations
 
-keenanlaws: https://github.com/keenanlaws/Python-J2534-Interface
+keenanlaws: https://github.com/keenanlaws/Python-J2534-Interface  
 kekelele: https://github.com/kekelele/python_j2534
