@@ -189,6 +189,36 @@ class PASSTHRU_MSG(ct.Structure):
         ("_Data"             , ct.c_ubyte*4128),
     ]
 
+    def __init__(self, *args, **kwargs):
+        """Initializer
+
+        Can be called with no args or kwargs to create an empty
+        structure to be used for "receive" functions. Otherwise, the
+        following signature should be used to initialize the message.
+
+        Arguments:
+        - protocol: `ProtocolID`
+
+        Keywords [Default]:
+        - tx_flags [`TxFlags.TX_NORMAL_TRANSMIT`]: `TxFlags`
+        - data [`b''`]: `bytes` array
+        """
+
+        # empty initializer
+        if not args and not kwargs:
+            super(PASSTHRU_MSG, self).__init__()
+
+        # standard initializer
+        else:
+            protocol = args[0]
+            tx_flags = kwargs.pop('tx_flags', TxFlags.TX_NORMAL_TRANSMIT)
+            data = kwargs.pop('data', b'')
+
+            data_arr = (ct.c_ubyte*4128)(*data)
+            super(PASSTHRU_MSG, self).__init__(
+                protocol, 0x0, tx_flags, 0, len(data), len(data), data_arr
+            )
+
     @property
     def ProtocolID(self):
         return ProtocolID(self._ProtocolID)
@@ -201,7 +231,34 @@ class PASSTHRU_MSG(ct.Structure):
     def TxFlags(self):
         return TxFlags(self._TxFlags)
 
+    @property
+    def Timestamp(self):
+        return self.Timestamp
+
+    @property
+    def DataSize(self):
+        return self.DataSize
+
+    @property
+    def ExtraDataIndex(self):
+        return self.ExtraDataIndex
+
+    @property
+    def Data(self):
+        return bytes(self._Data[:self.ExtraDataIndex])
+
+    @property
+    def ExtraData(self):
+        if self.ExtraDataIndex == self.DataSize:
+            return b''
+        else:
+            return bytes(
+                self._Data[self.ExtraDataIndex:self.DataSize]
+            )
+
 class SCONFIG(ct.Structure):
+    "Initialize with `IoctlParameter`, `int`"
+
     _fields_ = [
         ("_Parameter", ct.c_ulong),
         ("Value"     , ct.c_ulong),
@@ -217,8 +274,15 @@ class SCONFIG_LIST(ct.Structure):
         ("ConfigPtr"    , ct.POINTER(SCONFIG)),
     ]
 
+    def __init__(self, sconfig_arr):
+        "Initializer. Pass in a `list` of `SCONFIG` instances"
+        Config = (SCONFIG*len(sconfig_arr))(*sconfig_arr)
+        super(SCONFIG_LIST, self).__init__(
+            len(sconfig_arr), ct.cast(Config, ct.POINTER(SCONFIG))
+        )
+
     @property
-    def ConfigArray(self):
+    def Config(self):
         return [self.ConfigPtr[x] for x in range(self.NumOfParams)]
 
 class SBYTE_ARRAY(ct.Structure):
@@ -226,3 +290,7 @@ class SBYTE_ARRAY(ct.Structure):
         ("NumOfBytes"   , ct.c_ulong),
         ("BytePtr"      , ct.c_char_p),
     ]
+
+    def __init__(self, byte_arr=b'\x00'):
+        "Initializer. Pass in a `bytes` instance"
+        super(SBYTE_ARRAY, self).__init__(len(byte_arr), byte_arr)

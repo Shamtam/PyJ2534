@@ -317,7 +317,10 @@ class J2534Dll(object):
             channel_id, byref(Msg[0]), byref(NumMsgs), timeout
         )
 
-        return [] if ret == J2534Errors.ERR_BUFFER_EMPTY else list(Msg)[:NumMsgs.value]
+        return (
+            [] if ret == J2534Errors.ERR_BUFFER_EMPTY
+            else list(Msg)[:NumMsgs.value]
+        )
 
     def PassThruWriteMsgs(self, channel_id, msgs, timeout=None):
         """Write messages to the specified channel.
@@ -349,25 +352,24 @@ class J2534Dll(object):
 
         return NumMsgs.value
 
-    def PassThruStartPeriodicMsg(self, channel_id, msgs, interval):
-        """Queue the specified messages for periodic transmission.
+    def PassThruStartPeriodicMsg(self, channel_id, msg, interval):
+        """Queue the specified message for periodic transmission.
 
         Returns a handle to this periodic message.
 
         Arguments:
         - `channel_id`: the handle to the previously opened channel
-        - `msgs`: `list` of `PASSTHRU_MSG` instances
+        - `msg`: `PASSTHRU_MSG` instance
         - `interval`: `int` specifying the period of transmissions, in
             ms. Valid intervals are between 5-65535ms
         """
         if interval not in range(5, 65536):
             raise ValueError('`interval` must be between 5-65535')
 
-        Msg = (PASSTHRU_MSG*len(msgs))(*msgs)
         MsgID = c_ulong()
 
         self._dll.PassThruStartPeriodicMsg(
-            channel_id, byref(Msg[0]), byref(MsgID), interval
+            channel_id, byref(msg), byref(MsgID), interval
         )
 
         return MsgID
@@ -398,8 +400,8 @@ class J2534Dll(object):
         Keywords [Default]
         - `mask_msg` [`None`]: `PASSTHRU_MSG`
         - `pattern_msg` [`None`]: `PASSTHRU_MSG`
-        - `flow_msg` [`None`]: `PASSTHRU_MSG`, ignored for
-            `PASS_FILTER` or `BLOCK_FILTER` cases
+        - `flow_msg` [`None`]: `PASSTHRU_MSG`, ignored for `PASS_FILTER`
+            or `BLOCK_FILTER` cases
         """
         FilterID = c_ulong()
 
@@ -506,16 +508,14 @@ class J2534Dll(object):
         ioctl_params = [
             SCONFIG(par, 0) for par in _params if par not in _unused_params
         ]
-
-        Config = (SCONFIG*len(ioctl_params))(*ioctl_params)
-        Input = SCONFIG_LIST(len(params), cast(Config, POINTER(SCONFIG)))
+        Input = SCONFIG_LIST(ioctl_params)
         self._dll.PassThruIoctl(
             channel_id,
             IoctlID.GET_CONFIG,
             byref(Input),
             None
         )
-        return {IoctlParameter(x.Parameter): x.Value for x in Config}
+        return {IoctlParameter(x.Parameter): x.Value for x in Input.Config}
 
     def PassThruIoctlSetConfig(self, channel_id, params):
         """Set protocol configuration parameters for the given channel.
@@ -525,9 +525,7 @@ class J2534Dll(object):
         - `params`: `dict` of {`IoctlParameter`: `int`} key-val pairs
         """
         ioctl_params = [SCONFIG(par.value, val) for par, val in params.items()]
-
-        Config = (SCONFIG*len(ioctl_params))(*ioctl_params)
-        Input = SCONFIG_LIST(len(params), cast(Config, POINTER(SCONFIG)))
+        Input = SCONFIG_LIST(ioctl_params)
         self._dll.PassThruIoctl(
             channel_id,
             IoctlID.SET_CONFIG,
@@ -578,8 +576,8 @@ class J2534Dll(object):
         - `channel_id`: handle to the previously opened channel
         - `addr`: `int` containing the target address
         """
-        Input = SBYTE_ARRAY(1, bytes([addr]))
-        Output = SBYTE_ARRAY(2, b'\xff\xff')
+        Input = SBYTE_ARRAY(bytes([addr]))
+        Output = SBYTE_ARRAY(b'\xff\xff')
         self._dll.PassThruIoctl(
             channel_id,
             IoctlID.FIVE_BAUD_INIT,
@@ -684,7 +682,7 @@ class J2534Dll(object):
         - `channel_id`: handle to the previously opened channel
         - `addrs`: `list` of `int` containing the addresses to be added
         """
-        Input = SBYTE_ARRAY(len(addrs), bytes(addrs))
+        Input = SBYTE_ARRAY(bytes(addrs))
         self._dll.PassThruIoctl(
             channel_id,
             IoctlID.ADD_TO_FUNCT_MSG_LOOKUP_TABLE,
@@ -699,7 +697,7 @@ class J2534Dll(object):
         - `channel_id`: handle to the previously opened channel
         - `addrs`: `list` of `int` containing the addresses to be deleted
         """
-        Input = SBYTE_ARRAY(len(addrs), bytes(addrs))
+        Input = SBYTE_ARRAY(bytes(addrs))
         self._dll.PassThruIoctl(
             channel_id,
             IoctlID.DELETE_FROM_FUNCT_MSG_LOOKUP_TABLE,
