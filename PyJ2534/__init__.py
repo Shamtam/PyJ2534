@@ -14,12 +14,5 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import platform
-
-_platform = platform.architecture()[1].lower()
-
-if 'win' not in _platform:
-    raise RuntimeError('PyJ2534 currently only supports Windows')
-
 from .dll import get_interfaces, load_interface
 from .define import *

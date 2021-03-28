@@ -1,0 +1,16 @@
+[flake8]
+exclude =
+    .git,
+    **docs**,
+    __pycache__,
+    __init__.py,
+
+ignore =
+    # E203: whitespace before ','
+    E203,
+    # E221: multiple spaces before operator
+    E221,
+    # E226: missing whitespace around arithmetic operator
+    E226,
+    # E261: at least two spaces before inline comment
+    E261

@@ -14,12 +14,14 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+"""This module provides helpers to easily handle J2534 errors"""
+
 from enum import IntEnum
 
-class LoadDLLError(Exception):
-    pass
 
 class J2534Errors(IntEnum):
+    """J2534 return/error codes."""
+
     STATUS_NOERROR              = 0x00
     ERR_NOT_SUPPORTED           = 0x01
     ERR_INVALID_CHANNEL_ID      = 0x02
@@ -52,46 +54,58 @@ class J2534Errors(IntEnum):
 
     RESERVED_J2534_2            = 0x10000
 
+
 _error_msg_map = {
     J2534Errors.STATUS_NOERROR: 'Function call successful',
 
-    J2534Errors.ERR_NOT_SUPPORTED: 'Device cannot support requested functionality '
-        'mandated in this document. Device is not fully SAE J2534 compliant',
+    J2534Errors.ERR_NOT_SUPPORTED: (
+        'Device cannot support requested functionality mandated in this '
+        'document. Device is not fully SAE J2534 compliant'
+    ),
 
     J2534Errors.ERR_INVALID_CHANNEL_ID: 'Invalid ChannelID value',
 
-    J2534Errors.ERR_INVALID_PROTOCOL_ID: 'Invalid ProtocolID value, unsupported '
-        'ProtocolID, or there is a resource conflict (i.e. trying to connect '
-        'to multiple protocols that are mutually exclusive such as J1850PWM '
-        'and J1850VPW, or CAN and SCI A, etc.)',
+    J2534Errors.ERR_INVALID_PROTOCOL_ID: (
+        'Invalid ProtocolID value, unsupported ProtocolID, or there is a '
+        'resource conflict (i.e. trying to connect to multiple protocols that '
+        'are mutually exclusive such as J1850PWM and J1850VPW, or CAN and SCI '
+        'A, etc.)'
+    ),
 
-    J2534Errors.ERR_NULL_PARAMETER: 'NULL pointer supplied where a valid pointer '
-        'is required',
+    J2534Errors.ERR_NULL_PARAMETER: (
+        'NULL pointer supplied where a valid pointer is required'
+    ),
 
     J2534Errors.ERR_INVALID_IOCTL_VALUE: 'Invalid value for Ioctl parameter',
 
     J2534Errors.ERR_INVALID_FLAGS: 'Invalid flag values',
 
-    J2534Errors.ERR_FAILED: 'Undefined error, use PassThruGetLastError for text '
-        'description',
+    J2534Errors.ERR_FAILED: (
+        'Undefined error, use PassThruGetLastError for text description'
+    ),
 
     J2534Errors.ERR_DEVICE_NOT_CONNECTED: 'Device ID invalid',
 
-    J2534Errors.ERR_TIMEOUT: 'Timeout. '
+    J2534Errors.ERR_TIMEOUT: (
+        'Timeout. '
         'PassThruReadMsg: No message available to read or could not read the '
         'specified number of messages. The actual number of messages read is '
         'placed in <NumMsgs> '
         'PassThruWriteMsg: Device could not write the specified number of '
         'messages. The actual number of messages sent on the vehicle network '
-        'is placed in <NumMsgs>.',
+        'is placed in <NumMsgs>.'
+    ),
 
-    J2534Errors.ERR_INVALID_MSG: 'Invalid message structure pointed to by pMsg '
-        '(Reference Section 8 – Message Structure)',
+    J2534Errors.ERR_INVALID_MSG: (
+        'Invalid message structure pointed to by pMsg (Reference Section 8 – '
+        'Message Structure)'
+    ),
 
     J2534Errors.ERR_INVALID_TIME_INTERVAL: 'Invalid TimeInterval value',
 
-    J2534Errors.ERR_EXCEEDED_LIMIT: 'Exceeded maximum number of message IDs or '
-        'allocated space',
+    J2534Errors.ERR_EXCEEDED_LIMIT: (
+        'Exceeded maximum number of message IDs or allocated space'
+    ),
 
     J2534Errors.ERR_INVALID_MSG_ID: 'Invalid MsgID value',
 
@@ -99,33 +113,46 @@ _error_msg_map = {
 
     J2534Errors.ERR_INVALID_IOCTL_ID: 'Invalid IoctlID value',
 
-    J2534Errors.ERR_BUFFER_EMPTY: 'Protocol message buffer empty, no messages '
-        'available to read',
+    J2534Errors.ERR_BUFFER_EMPTY: (
+        'Protocol message buffer empty, no messages available to read'
+    ),
 
-    J2534Errors.ERR_BUFFER_FULL: 'Protocol message buffer full. All the messages '
-        'specified may not have been transmitted',
+    J2534Errors.ERR_BUFFER_FULL: (
+        'Protocol message buffer full. All the messages specified may not '
+        'have been transmitted'
+    ),
 
-    J2534Errors.ERR_BUFFER_OVERFLOW: 'Indicates a buffer overflow occurred and '
-        'messages were lost',
+    J2534Errors.ERR_BUFFER_OVERFLOW: (
+        'Indicates a buffer overflow occurred and messages were lost'
+    ),
 
-    J2534Errors.ERR_PIN_INVALID: 'Invalid pin number, pin number already in use, '
-        'or voltage already applied to a different pin',
+    J2534Errors.ERR_PIN_INVALID: (
+        'Invalid pin number, pin number already in use, or voltage already '
+        'applied to a different pin'
+    ),
 
     J2534Errors.ERR_CHANNEL_IN_USE: 'Channel number is currently connected',
 
-    J2534Errors.ERR_MSG_PROTOCOL_ID: 'Protocol type in the message does not match '
-        'the protocol associated with the Channel ID',
+    J2534Errors.ERR_MSG_PROTOCOL_ID: (
+        'Protocol type in the message does not match the protocol associated '
+        'with the Channel ID'
+    ),
 
     J2534Errors.ERR_INVALID_FILTER_ID: 'Invalid Filter ID value',
 
-    J2534Errors.ERR_NO_FLOW_CONTROL: 'No flow control filter set or matched (for '
-        'protocolID ISO15765 only).',
+    J2534Errors.ERR_NO_FLOW_CONTROL: (
+        'No flow control filter set or matched (for protocolID ISO15765 only).'
+    ),
 
-    J2534Errors.ERR_NOT_UNIQUE: 'A CAN ID in pPatternMsg or pFlowControlMsg '
-        'matches either ID in an existing FLOW_CONTROL_FILTER',
+    J2534Errors.ERR_NOT_UNIQUE: (
+        'A CAN ID in pPatternMsg or pFlowControlMsg matches either ID in an '
+        'existing FLOW_CONTROL_FILTER'
+    ),
 
-    J2534Errors.ERR_INVALID_BAUDRATE: 'The desired baud rate cannot be achieved '
-        'within the tolerance specified in Section 6.5',
+    J2534Errors.ERR_INVALID_BAUDRATE: (
+        'The desired baud rate cannot be achieved within the tolerance '
+        'specified in Section 6.5'
+    ),
 
     J2534Errors.ERR_INVALID_DEVICE_ID: 'Unable to communicate with device',
 
@@ -133,6 +160,7 @@ _error_msg_map = {
 
     J2534Errors.RESERVED_J2534_2: 'Reserved for SAE J2534-2',
 }
+
 
 def _get_error_text(err):
 
@@ -155,17 +183,22 @@ def _get_error_text(err):
         'Invalid or undefined error code 0x{:02x}'.format(err)
     )
 
+
+class LoadDLLError(Exception):
+    """Exception raised when a DLL fails to load."""
+    pass
+
+
 class J2534Error(Exception):
-    """
-    Exception raised when J2534 errors are not handled by the dll wrapper
+    """Exception raised when J2534 errors are not handled by the wrapper.
 
     Attributes:
-    - error: `J2534Errors` enumeration
-    - message: `str` description of the error
+        error (:class:`J2534Errors`): error code
+        message (str): error description
     """
 
     def __init__(self, j2534_error):
-        "Initializer. Pass in a `J2534Errors` enumeration value"
+        """Initialize the exception with a :class:`J2534Errors`"""
         self.error = j2534_error
         self.message = _get_error_text(j2534_error)
         super(J2534Error, self).__init__('[{}] {}'.format(

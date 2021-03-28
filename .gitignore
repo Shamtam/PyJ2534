@@ -1,3 +1,6 @@
+# Sphinx autosummary generated files
+docs/source/api/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

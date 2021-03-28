@@ -14,9 +14,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+"""This module contains Python-native versions of all J2534 constructs."""
+
 import ctypes as ct
 
 from enum import IntEnum, IntFlag
+
 
 class ProtocolID(IntEnum):
     J1850VPW        = 0x01
@@ -30,9 +33,10 @@ class ProtocolID(IntEnum):
     SCI_B_ENGINE    = 0x09
     SCI_B_TRANS     = 0x0A
 
-    RESERVED        = 0x0B # through 0x7FFF
-    RESERVED_J2534_2 = 0x8000 # through 0xFFFF
-    MFG_SPECIFIC    = 0x10000 # through 0xFFFFFFFF
+    RESERVED        = 0x0B      # through 0x7FFF
+    RESERVED_J2534_2 = 0x8000   # through 0xFFFF
+    MFG_SPECIFIC    = 0x10000   # through 0xFFFFFFFF
+
 
 class ProtocolFlags(IntFlag):
     ISO9141_K_LINE_ONLY = 0x1000
@@ -40,14 +44,16 @@ class ProtocolFlags(IntFlag):
     ISO9141_NO_CHECKSUM = 0x200
     CAN_29BIT_ID        = 0x100
 
+
 class FilterType(IntEnum):
     PASS_FILTER         = 0x1
     BLOCK_FILTER        = 0x2
     FLOW_CONTROL_FILTER = 0x3
 
-    RESERVED            = 0x4 # through 0x7FFF
-    RESERVED_J2534_2    = 0x8000 # through 0xFFFF
-    MFG_SPECIFIC        = 0x10000 # through 0xFFFFFFFF
+    RESERVED            = 0x4       # through 0x7FFF
+    RESERVED_J2534_2    = 0x8000    # through 0xFFFF
+    MFG_SPECIFIC        = 0x10000   # through 0xFFFFFFFF
+
 
 class ProgrammingPin(IntEnum):
     AUX_OUTPUT  = 0
@@ -59,6 +65,7 @@ class ProgrammingPin(IntEnum):
     PIN14       = 14
     PIN15       = 15
 
+
 class ProgrammingVoltage(IntEnum):
     Voltage_05V     = 0x00001388    # 5000mV
     Voltage_20V     = 0x00004E20    # 20000mV
@@ -66,6 +73,7 @@ class ProgrammingVoltage(IntEnum):
     MAX_VOLTAGE     = Voltage_20V
     SHORT_TO_GROUND = 0xFFFFFFFE
     VOLTAGE_OFF     = 0xFFFFFFFF
+
 
 class RxFlags(IntFlag):
     CAN_29BIT_ID           = 0x100
@@ -76,6 +84,7 @@ class RxFlags(IntFlag):
     START_OF_MESSAGE       = 0x002
     TX_MSG_TYPE            = 0x001
 
+
 class RxStatus(IntEnum):
     Normal      = 0x0
     RxStart     = RxFlags.START_OF_MESSAGE
@@ -83,6 +92,7 @@ class RxStatus(IntEnum):
     RxPadError  = RxFlags.ISO15765_PADDING_ERROR
     TxDone      = RxFlags.TX_INDICATION | RxFlags.TX_MSG_TYPE
     Loopback    = RxFlags.TX_MSG_TYPE
+
 
 class TxFlags(IntFlag):
     SCI_TX_VOLTAGE      = 0x00800000
@@ -96,6 +106,7 @@ class TxFlags(IntFlag):
     ISO15765_CAN_ID_11  = 0x00000040
     SWCAN_HV_TX         = 0x00000400
     TX_NORMAL_TRANSMIT  = 0x00000000
+
 
 class IoctlID(IntEnum):
     GET_CONFIG                          = 0x01
@@ -113,31 +124,36 @@ class IoctlID(IntEnum):
     DELETE_FROM_FUNCT_MSG_LOOKUP_TABLE  = 0x0D
     READ_PROG_VOLTAGE                   = 0x0E
 
-    RESERVED_SAE                        = 0x0F # through 0x7FFF
+    RESERVED_SAE                        = 0x0F      # through 0x7FFF
 
-    RESERVED_SAE_J2534_2                = 0x8000 # through 0xFFFF
+    RESERVED_SAE_J2534_2                = 0x8000    # through 0xFFFF
 
-    RESERVED_MFG_SPECIFIC               = 0x10000 # through 0xFFFFFFFF
+    RESERVED_MFG_SPECIFIC               = 0x10000   # through 0xFFFFFFFF
+
 
 class IoctlNetworkLine(IntEnum):
     BUS_NORMAL  = 0
     BUS_PLUS    = 1
     BUS_MINUS   = 2
 
+
 class IoctlParity(IntEnum):
     NO_PARITY   = 0
     ODD_PARITY  = 1
     EVEN_PARITY = 2
 
+
 class Ioctl9141Bits(IntEnum):
     DataBits8 = 0
     DataBits7 = 1
+
 
 class IoctlFiveBaudMod(IntEnum):
     ISO9141_2_14230_4   = 0
     ISO9141_InvertKey2  = 1
     ISO9141_InvertAddr  = 2
     ISO9141             = 3
+
 
 class IoctlParameter(IntEnum):
     DATA_RATE           = 0x01
@@ -178,6 +194,7 @@ class IoctlParameter(IntEnum):
     FIVE_BAUD_MOD       = 0x21
     ISO15765_WFT_MAX    = 0x25
 
+
 class PASSTHRU_MSG(ct.Structure):
     _fields_ = [
         ("_ProtocolID"       , ct.c_ulong),
@@ -190,18 +207,22 @@ class PASSTHRU_MSG(ct.Structure):
     ]
 
     def __init__(self, *args, **kwargs):
-        """Initializer
+        """Initializer.
 
-        Can be called with no args or kwargs to create an empty
-        structure to be used for "receive" functions. Otherwise, the
-        following signature should be used to initialize the message.
+        To initialize a message for transmission, use the optional
+        ``tx_flags`` and ``data`` keywords to initialize the message.
 
-        Arguments:
-        - protocol: `ProtocolID`
+        Otherwise, for a dummy message container to be used for receive
+        functions, initialize with no arguments or keywords.
 
-        Keywords [Default]:
-        - tx_flags [`TxFlags.TX_NORMAL_TRANSMIT`]: `TxFlags`
-        - data [`b''`]: `bytes` array
+        Args:
+            protocol (:class:`.ProtocolID`):
+                Protocol that is used by this message.
+            tx_flags (:class:`.TxFlags`):
+                Flags to be specified when creating a transmit message.
+                Defaults to :data:`TxFlags.TX_NORMAL_TRANSMIT`
+            data (bytes):
+                Raw message byte data.
         """
 
         # empty initializer
@@ -256,8 +277,12 @@ class PASSTHRU_MSG(ct.Structure):
                 self._Data[self.ExtraDataIndex:self.DataSize]
             )
 
+
 class SCONFIG(ct.Structure):
-    "Initialize with `IoctlParameter`, `int`"
+    """Ioctl interface config parameter structure.
+
+    Initialize with :class:`.IoctlParameter`, ``int`` arguments.
+    """
 
     _fields_ = [
         ("_Parameter", ct.c_ulong),
@@ -268,6 +293,7 @@ class SCONFIG(ct.Structure):
     def Parameter(self):
         return IoctlParameter(self._Parameter)
 
+
 class SCONFIG_LIST(ct.Structure):
     _fields_ = [
         ("NumOfParams"  , ct.c_ulong),
@@ -275,7 +301,10 @@ class SCONFIG_LIST(ct.Structure):
     ]
 
     def __init__(self, sconfig_arr):
-        "Initializer. Pass in a `list` of `SCONFIG` instances"
+        """Initializer.
+
+        Initialize with a ``list`` of :class:`.SCONFIG` instances.
+        """
         Config = (SCONFIG*len(sconfig_arr))(*sconfig_arr)
         super(SCONFIG_LIST, self).__init__(
             len(sconfig_arr), ct.cast(Config, ct.POINTER(SCONFIG))
@@ -285,6 +314,7 @@ class SCONFIG_LIST(ct.Structure):
     def Config(self):
         return [self.ConfigPtr[x] for x in range(self.NumOfParams)]
 
+
 class SBYTE_ARRAY(ct.Structure):
     _fields_ = [
         ("NumOfBytes"   , ct.c_ulong),
@@ -292,5 +322,8 @@ class SBYTE_ARRAY(ct.Structure):
     ]
 
     def __init__(self, byte_arr=b'\x00'):
-        "Initializer. Pass in a `bytes` instance"
+        """Initializer.
+
+        Initialize with a ``bytes`` or ``bytearray``.
+        """
         super(SBYTE_ARRAY, self).__init__(len(byte_arr), byte_arr)

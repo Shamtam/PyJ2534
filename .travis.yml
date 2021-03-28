@@ -1,0 +1,20 @@
+language: python
+python:
+- '3.8'
+env:
+  - PYTHONPATH=$TRAVIS_BUILD_DIR
+install:
+- pip install -r dev-requirements.txt
+script:
+- cd docs
+- make html
+deploy:
+  provider: pages:git
+  token:
+    secure: kgKWc8gA1U72jWRBV0wWnNXZoQOS5Clpcx381bPxa5qyvufX6EOQZkeO4KjdyJfuXpUYaGuwkPawJEnnWJNDlzO1s6iRfZy1tcsxDiOJLXSYxoBeP3MEcK9fAkPysvu8kwFoJKmFQ5eK94Buh2zEHNRfGJgWZ5zhmgCPtOhYsdwIlt9Q/ddWCLqsEjdP26mGcVCE/p7PpPj1SH8kZ1b5wuYtgxYIMAwjsSUIBZm9mtFo1qL7kcNRmCzOTKgn5y1r/mRpuvISacGxFbMGvSWKwilreE36wgslrL0nbYG9s+lswhHrHZEVuGtSrfHdDjHCEFAqzeJ9gYni26sAuY4HtzKftACDJIRZJmNdTyX1jhW3o913J4hsbCAAftI/CPWtqpTzT+JLu1cj1AcKVXY01Y5FBL3qJoOsmYk8PEx2ZfsfsZBR7Iuq1HDEnMagUqjiJQVGz91t550bYe+HT/7KLPGsCE4DUJ+1S6Qd9thM4aKl0MLFXqCOiKdTl+AALXn+H+p0JairffnmgRMCSgQtL6AaPiXNN2gwmL5+7anRmTEFNiPB/a+Y5pz/866b5jL1rbc9Bu1FrHjl2mKQNlJKAYRowWbaPR3egLvvBNy0vvxqZ3AtKQDYka6Y8PNUYW23RAMP67IKueN3M9UDta/xyU+uw4crXkkUHkNNByRwsH8=
+  edge: true
+  verbose: true
+  local_dir: "./_build/html/"
+  keep_history: true
+  on:
+    branch: main

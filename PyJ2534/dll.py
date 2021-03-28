@@ -14,16 +14,15 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import logging
-import sys
-import winreg
+"""This module provides a Python-native implementation of the J2534-1 API."""
 
-_logger = logging.getLogger(__name__)
+import logging
+import platform
+import sys
 
 from ctypes import (
-    byref, create_string_buffer, POINTER, cast,
-    WinDLL,
-    c_char, c_char_p, c_long, c_ulong, c_void_p
+    byref, create_string_buffer, POINTER,
+    c_char_p, c_ulong, c_void_p
 )
 
 from .define import (
@@ -32,13 +31,27 @@ from .define import (
 )
 from .error import LoadDLLError, J2534Errors, J2534Error
 
-def get_interfaces():
-    """Get all registered J2534 04.04 Pass-Thru interface .dlls
+_logger = logging.getLogger(__name__)
+_platform = platform.architecture()[1].lower()
 
-    Returns a dictionary `{Name: FunctionLibrary}` where `Name` is the
-    display string for the given Pass-Thru interface, and
-    `FunctionLibrary` is the absolute path to the corresponding .dll
+
+def get_interfaces():
+    """Enumerate all registered J2534 04.04 Pass-Thru interface DLLs
+
+    Returns:
+        dict: A dict mapping display names of any registered J2534
+        Pass-Thru DLLs to their absolute filepath.
+
+        The name can be used in user-facing GUI elements to allow
+        selection of a particular Pass-Thru device, and filepath can
+        be passed to :func:`load_interface` to instantiate a
+        :class:`J2534Dll` wrapping the desired DLL.
     """
+
+    if 'win' not in _platform:
+        raise RuntimeError('PyJ2534 currently only supports Windows')
+    else:
+        import winreg
 
     ret = {}
 
@@ -59,17 +72,38 @@ def get_interfaces():
 
     return ret
 
+
 def load_interface(dll_path):
-    """Returns a `J2534Dll` for the specified `dll_path`"""
+    """Load a J2534 DLL.
+
+    Args:
+        dll_path (str): Absolute filepath to the DLL to load
+
+    Returns:
+        :class:`J2534Dll`: A wrapper around the supplied DLL
+    """
     return J2534Dll(dll_path)
 
+
 class J2534Dll(object):
-    "Wrapper around a J2534 dll as specified in the SAE J2534-1 2004 document"
+    """Wrapper around a J2534-1 DLL.
+
+    Refer to the J2534-1 API specification for more information.
+
+    All functions raise a :class:`.J2534Error` if an error occurs.
+    """
 
     def __init__(self, dll_path):
+        """Instantiate a wrapper to the DLL at the given filepath."""
 
         try:
+            if 'win' not in _platform:
+                raise RuntimeError('PyJ2534 currently only supports Windows')
+            else:
+                from ctypes import WinDLL
+
             self._dll = WinDLL(dll_path)
+
         except WindowsError:
             raise LoadDLLError
 
@@ -232,13 +266,19 @@ class J2534Dll(object):
             for key, val in fdef.items():
                 f.__setattr__(key, val)
 
+    def __repr__(self):
+        return '<{}: {}>'.format(
+            self.__class__.__name__,
+            self._dll._name
+        )
+
     def _error_check(self, result, func, arguments):
-        """Default callback for J2534 DLL function calls"""
+        """Default callback for J2534 DLL function calls."""
         if result != J2534Errors.STATUS_NOERROR:
             raise J2534Error(result)
 
     def _read_check(self, result, func, arguments):
-        """Callback for a J2534 `PassThruReadMsgs` call"""
+        """Callback for a J2534 :func:`PassThruReadMsgs` call."""
         if result == J2534Errors.ERR_BUFFER_EMPTY:
             return
         else:
@@ -247,7 +287,8 @@ class J2534Dll(object):
     def PassThruOpen(self):
         """Open the Pass-Thru device.
 
-        Returns a handle to the opened device
+        Returns:
+            int: Handle to the opened device
         """
         dev_id = c_ulong()
         self._dll.PassThruOpen(c_void_p(), byref(dev_id))
@@ -256,21 +297,26 @@ class J2534Dll(object):
     def PassThruClose(self, device_id):
         """Close the Pass-Thru device
 
-        Arguments:
-        - `device_id`: handle to the previously opened device
+        Args:
+            device_id (int): Handle to the previously opened device
         """
         self._dll.PassThruClose(device_id)
 
     def PassThruConnect(self, device_id, protocol, flags, baud):
-        """Establish a Pass-Thru connection using the given device
+        """Establish a Pass-Thru connection using the given device.
 
-        Returns a handle to the channel if successfully opened.
+        Args:
+            device_id (int):
+                Handle to the previously opened device
+            protocol (:class:`.ProtocolID`):
+                Desired protocol
+            flags (:class:`.ProtocolFlags`):
+                Connection flags
+            baud (int):
+                Desired baud rate
 
-        Arguments:
-        `device_id`: handle to the previously opened device
-        `protocol`: `ProtocolID`
-        `flags`: `ProtocolFlags`
-        `baud`: `int` specifying the desired baud rate
+        Returns:
+            int: Handle to the opened channel
         """
         chan_id = c_ulong()
         self._dll.PassThruConnect(
@@ -283,29 +329,43 @@ class J2534Dll(object):
         return chan_id
 
     def PassThruDisconnect(self, channel_id):
-        """Close the specified Pass-Thru channel
+        """Close the specified Pass-Thru channel.
 
-        Arguments:
-        `channel_id`: the handle to the previously opened channel
+        Args:
+            channel_id (int): Handle to the previously opened channel
         """
         self._dll.PassThruDisconnect(channel_id)
 
     def PassThruReadMsgs(self, channel_id, num_msgs=1, timeout=None):
         """Read messages from the specified channel.
 
-        Returns a `list` containing all read `PASSTHRU_MSG` instances
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            num_msgs (int):
+                Number of messages to attempt to read.
+            timeout (int):
+                Read timeout in ms, or None.
 
-        Arguments:
-        - `channel_id`: the handle to the previously opened channel
+                If None, then this function will return up to
+                ``num_msgs`` from the receive buffer (or nothing) and
+                return immediately.
 
-        Keywords [Default]:
-        - `num_msgs` [`1`]: the number of messages to attempt to read
-        - `timeout` [`None`]: `int` specifying the read timeout in ms.
-            If `None`, then this function will return up to `num_msgs`
-            from the receive buffer (or nothing) and return immediately.
-            Otherwise, this function will return either when the timeout
-            has expired, an error occurs, or the specified number of
-            messages has been read.
+                Otherwise, this function will return either when the
+                timeout has expired, an error occurs, or the specified
+                number of messages has been read.
+
+        Returns:
+            list: list of :py:class:`PyJ2534.define.PASSTHRU_MSG`
+            instances.
+
+            If no timeout is specified, up to ``num_msgs`` messages from
+            the receive buffer are returned immediately.
+
+            Otherwise, this function will return when ``num_msgs``
+            messages have been read from the receive buffer, or raises
+            a timeout :class:.`J2534Error` if the timeout lapses before
+            ``num_msgs`` messages have been read.
         """
         Msg = (PASSTHRU_MSG*num_msgs)()
         NumMsgs = c_ulong(num_msgs)
@@ -325,20 +385,26 @@ class J2534Dll(object):
     def PassThruWriteMsgs(self, channel_id, msgs, timeout=None):
         """Write messages to the specified channel.
 
-        Returns the number of messages successfully transmitted (non-zero
-        timeout) or queued (no timeout).
+        Returns the number of messages successfully transmitted
+        (non-zero timeout) or queued (no timeout).
 
-        Arguments:
-        - `channel_id`: the handle to the previously opened channel
-        - `msgs`: `list` of `PASSTHRU_MSG` instances
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            msgs (list):
+                list of :class:`.PASSTHRU_MSG` instances
+            timeout (int):
+                Write timeout in ms, or None
 
-        Keywords [Default]
-        - `timeout` [`None`]: `int` specifying the write timeout in ms.
-            If `None`, then this function will queue up to `num_msgs`
-            into the write buffer, and return immediately. Otherwise,
-            this function will return either when the timeout has
-            expired, an error occurs, or the specified number of
-            messages have been written.
+        Returns:
+            int: Number of successfully transmitted/queued messages.
+
+            If no timeout is specified, the number of messages queued
+            into the write buffer is returned immediately.
+
+            Otherwise, the number of transmitted messages is returned,
+            or a timeout :class:.`J2534Error` is raised if the timeout
+            lapses before all provided messages have been transmitted.
         """
         Msg = (PASSTHRU_MSG*len(msgs))(*msgs)
         NumMsgs = c_ulong(len(msgs))
@@ -355,13 +421,17 @@ class J2534Dll(object):
     def PassThruStartPeriodicMsg(self, channel_id, msg, interval):
         """Queue the specified message for periodic transmission.
 
-        Returns a handle to this periodic message.
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            msg (:class:`.PASSTHRU_MSG`):
+                Message to be queued
+            interval (int):
+                Period of transmissions, in ms. Valid intervals are
+                between 5-65535ms
 
-        Arguments:
-        - `channel_id`: the handle to the previously opened channel
-        - `msg`: `PASSTHRU_MSG` instance
-        - `interval`: `int` specifying the period of transmissions, in
-            ms. Valid intervals are between 5-65535ms
+        Returns:
+            int: Handle to the periodic message
         """
         if interval not in range(5, 65536):
             raise ValueError('`interval` must be between 5-65535')
@@ -377,9 +447,11 @@ class J2534Dll(object):
     def PassThruStopPeriodicMsg(self, channel_id, msg_id):
         """Stop the transmission of the specified message
 
-        Arguments:
-        - `channel_id`: the handle to the previously opened channel
-        - `msg_id`: the handle to the periodic message to stop
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            msg_id (int):
+                Handle to the periodic message to stop
         """
         self._dll.PassThruStopPeriodicMsg(channel_id, msg_id)
 
@@ -389,19 +461,25 @@ class J2534Dll(object):
     ):
         """Configure filtering for messages on the specified channel.
 
-        Returns a handle to the created filter. Keywords are to be
-        specified as required. See the SAE J2534-1 recommended practices
-        document for more information.
+        Keywords are to be specified as required. See the SAE J2534-1
+        recommended practices document for more information.
 
-        Arguments:
-        - `channel_id`: the handle to the previously opened channel
-        - `filter_type`: `FilterType`
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            filter_type (:class:`.FilterType`):
+                Type of filter
+            mask_msg (:class:`.PASSTHRU_MSG`):
+                Mask message
+            pattern_msg (:class:`PASSTHRU_MSG`):
+                Pattern message
+            flow_msg (:class:`PASSTHRU_MSG`):
+                ignored when ``filter_type`` is
+                :attr:`~.FilterType.PASS_FILTER` or
+                :attr:`~.FilterType.BLOCK_FILTER`
 
-        Keywords [Default]
-        - `mask_msg` [`None`]: `PASSTHRU_MSG`
-        - `pattern_msg` [`None`]: `PASSTHRU_MSG`
-        - `flow_msg` [`None`]: `PASSTHRU_MSG`, ignored for `PASS_FILTER`
-            or `BLOCK_FILTER` cases
+        Returns:
+            int: Handle to the created filter.
         """
         FilterID = c_ulong()
 
@@ -423,31 +501,37 @@ class J2534Dll(object):
         return FilterID
 
     def PassThruStopMsgFilter(self, channel_id, filter_id):
-        """Remove the specified filter from the specified channel
+        """Remove the specified filter from the specified channel.
 
-        Arguments:
-        - `channel_id`: the handle to the previously opened channel
-        - `filter_id`: the handle to the periodic message to stop
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            filter_id (int):
+                Handle to the periodic message to stop
         """
         self._dll.PassThruStopMsgFilter(channel_id, filter_id)
 
     def PassThruSetProgrammingVoltage(self, device_id, pin_number, voltage):
-        """Set the programming voltage on the specified pin on the specified device
+        """Set the programming voltage on the specified pin on the specified device.
 
-        Arguments:
-        - `device_id` - handle to the previously opened device
-        - `pin_number` - `ProgrammingPin`
-        - `voltage` - `int` specifying the voltage to apply to the pin.
-            The voltage can either directly specified in mV, or via the
-            `ProgrammingVoltage` enumeration for cases where it's
-            desired to switch off the voltage or short the pin to GND.
-            Acceptable ranges are between 5000 and 20000.
+        Args:
+            device_id (int):
+                Handle to the previously opened device
+            pin_number (:class:`.ProgrammingPin`):
+                Pin to set
+            voltage (int):
+                Voltage to apply to the pin. The voltage can either
+                directly specified in mV, or via the
+                :class:`.ProgrammingVoltage` enumeration for cases where
+                it's desired to switch off the voltage or short the pin
+                to GND. Acceptable ranges are between 5000 and 20000.
         """
         valid_voltages = range(
             ProgrammingVoltage.MIN_VOLTAGE, ProgrammingVoltage.MAX_VOLTAGE + 1
         )
         if voltage not in (
-            [   ProgrammingVoltage.SHORT_TO_GROUND,
+            [
+                ProgrammingVoltage.SHORT_TO_GROUND,
                 ProgrammingVoltage.VOLTAGE_OFF
             ] + list(valid_voltages)
         ):
@@ -463,10 +547,13 @@ class J2534Dll(object):
         )
 
     def PassThruReadVersion(self, device_id):
-        """Returns a 3-tuple of (device firmware, DLL, and API) versions
+        """Get version information.
 
-        Arguments:
-        `device_id`: handle to the previously opened device
+        Args:
+            device_id (int): Handle to the previously opened device
+
+        Returns:
+            tuple: 3-tuple of versions: (device firmware, DLL, and API)
         """
         fw_str = create_string_buffer(80)
         dll_str = create_string_buffer(80)
@@ -477,6 +564,11 @@ class J2534Dll(object):
         return (fw_str, dll_str, api_str)
 
     def PassThruGetLastError(self):
+        """Get the last error message generated by the interface.
+
+        Returns:
+            str: Error message
+        """
         desc = create_string_buffer(80)
         self._dll.PassThruGetLastError(desc)
         return desc.value
@@ -484,11 +576,15 @@ class J2534Dll(object):
     def PassThruIoctlGetConfig(self, channel_id, params):
         """Get protocol configuration parameters for the given channel.
 
-        Returns a `dict` of {`IoctlParameter`: `int`} instances.
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            params (list):
+                list of :class:`.IoctlParameter` to retrieve values of
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
-        - `params`: `list` of `IoctlParameter`s to retrieve the values of
+        Returns:
+            dict: dict mapping the requested :class:`.IoctlParameter` to
+            their currently set int values
         """
         _unused_params = set([
             IoctlParameter.P1_MIN,
@@ -520,9 +616,11 @@ class J2534Dll(object):
     def PassThruIoctlSetConfig(self, channel_id, params):
         """Set protocol configuration parameters for the given channel.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
-        - `params`: `dict` of {`IoctlParameter`: `int`} key-val pairs
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            params (dict):
+                Mapping of :class:`.IoctlParameter` to desired values
         """
         ioctl_params = [SCONFIG(par.value, val) for par, val in params.items()]
         Input = SCONFIG_LIST(ioctl_params)
@@ -534,12 +632,13 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlReadVbatt(self, device_id):
-        """Read the voltage at pin 16 of the J1962 connector
+        """Read the voltage at pin 16 of the J1962 connector.
 
-        Returns an `int` indicating the voltage in mV
+        Args:
+            device_id (int): Handle to the previously opened device
 
-        Arguments:
-        - `device_id`: handle to the previously opened device
+        Returns:
+            int: Pin 16 voltage, in mV
         """
         Output = c_ulong()
         self._dll.PassThruIoctl(
@@ -551,12 +650,15 @@ class J2534Dll(object):
         return Output.value
 
     def PassThruIoctlReadProgVoltage(self, device_id):
-        """Read the programming voltage of the pass-thru device
+        """Read the programming voltage of the Pass-Thru device.
 
         Returns an `int` indicating the voltage in mV
 
-        Arguments:
-        - `device_id`: handle to the previously opened device
+        Args:
+            device_id (int): Handle to the previously opened device
+
+        Returns:
+            int: Programming voltage, in mV
         """
         Output = c_ulong()
         self._dll.PassThruIoctl(
@@ -568,13 +670,16 @@ class J2534Dll(object):
         return Output.value
 
     def PassThruIoctlFiveBaudInit(self, channel_id, addr):
-        """Initiate a five-baud initialization
+        """Initiate a five-baud initialization.
 
-        Returns a `bytes` containing the response from the ECU.
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            addr (int):
+                Target address for initialization
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
-        - `addr`: `int` containing the target address
+        Returns:
+            bytes: The response from the ECU
         """
         Input = SBYTE_ARRAY(bytes([addr]))
         Output = SBYTE_ARRAY(b'\xff\xff')
@@ -586,19 +691,18 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlFastInit(self, channel_id, msg=None):
-        """Initiate a fast initialization
+        """Initiate a fast initialization.
 
-        Returns a `PASSTHRU_MSG` containing the response from the ECU,
-        or `None` if no response is expected. If a response is not
-        received in the allowed time, initialization has failed
-        and this will raise an exception.
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            msg (:class:`.PASSTHRU_MSG`):
+                Message to be sent to the ECU for initialization.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
-
-        Keywords [Default]
-        - `msg` [`None`]: `PASSTHRU_MSG` containing the message to be
-            sent to the ECU for initialization.
+        Returns:
+            :class:`.PASSTHRU_MSG`: If a response is expected, a
+            :class:`.PASSTHRU_MSG` containing the response from the ECU,
+            ``None`` otherwise.
         """
         Input = PASSTHRU_MSG()
         Output = PASSTHRU_MSG()
@@ -611,10 +715,10 @@ class J2534Dll(object):
         return Output
 
     def PassThruIoctlClearTxBuffer(self, channel_id):
-        """Clear the transmit messages queue
+        """Clear the transmit messages queue.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
+        Args:
+            channel_id (int): Handle to the previously opened channel
         """
         self._dll.PassThruIoctl(
             channel_id,
@@ -624,10 +728,10 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlClearRxBuffer(self, channel_id):
-        """Clear the received messages queue
+        """Clear the received messages queue.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
+        Args:
+            channel_id (int): Handle to the previously opened channel
         """
         self._dll.PassThruIoctl(
             channel_id,
@@ -637,10 +741,10 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlClearPeriodicMsgs(self, channel_id):
-        """Clear all configured periodic messages
+        """Clear all configured periodic messages.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
+        Args:
+            channel_id (int): Handle to the previously opened channel
         """
         self._dll.PassThruIoctl(
             channel_id,
@@ -650,10 +754,10 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlClearMsgFilters(self, channel_id):
-        """Clear all configured filters
+        """Clear all configured filters.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
+        Args:
+            channel_id (int): Handle to the previously opened channel
         """
         self._dll.PassThruIoctl(
             channel_id,
@@ -663,10 +767,10 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlClearFunctMsgLookupTable(self, channel_id):
-        """Clear the functional message look-up table
+        """Clear the functional message look-up table.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
+        Args:
+            channel_id (int): Handle to the previously opened channel
         """
         self._dll.PassThruIoctl(
             channel_id,
@@ -676,11 +780,13 @@ class J2534Dll(object):
         )
 
     def PassThruIoctlAddToFunctMsgLookupTable(self, channel_id, addrs):
-        """Add addresses to the functional message look-up table
+        """Add addresses to the functional message look-up table.
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
-        - `addrs`: `list` of `int` containing the addresses to be added
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            addrs (list):
+                list of int containing the addresses to be added
         """
         Input = SBYTE_ARRAY(bytes(addrs))
         self._dll.PassThruIoctl(
@@ -693,9 +799,11 @@ class J2534Dll(object):
     def PassThruIoctlDeleteFromFunctMsgLookupTable(self, channel_id, addrs):
         """Delete addresses to the functional message look-up table
 
-        Arguments:
-        - `channel_id`: handle to the previously opened channel
-        - `addrs`: `list` of `int` containing the addresses to be deleted
+        Args:
+            channel_id (int):
+                Handle to the previously opened channel
+            addrs (list):
+                list of int containing the addresses to be deleted
         """
         Input = SBYTE_ARRAY(bytes(addrs))
         self._dll.PassThruIoctl(
