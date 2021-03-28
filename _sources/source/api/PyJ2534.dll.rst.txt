@@ -1,0 +1,36 @@
+PyJ2534.dll
+===========
+
+.. automodule:: PyJ2534.dll
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_interfaces
+      load_interface
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      J2534Dll
+   
+   
+
+   
+   
+   
+
+
+

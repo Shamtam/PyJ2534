@@ -1,0 +1,36 @@
+PyJ2534.error
+=============
+
+.. automodule:: PyJ2534.error
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      J2534Errors
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      J2534Error
+      LoadDLLError
+   
+   
+
+
+

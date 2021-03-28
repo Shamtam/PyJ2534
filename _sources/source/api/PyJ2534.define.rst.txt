@@ -1,0 +1,46 @@
+PyJ2534.define
+==============
+
+.. automodule:: PyJ2534.define
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FilterType
+      Ioctl9141Bits
+      IoctlFiveBaudMod
+      IoctlID
+      IoctlNetworkLine
+      IoctlParameter
+      IoctlParity
+      PASSTHRU_MSG
+      ProgrammingPin
+      ProgrammingVoltage
+      ProtocolFlags
+      ProtocolID
+      RxFlags
+      RxStatus
+      SBYTE_ARRAY
+      SCONFIG
+      SCONFIG_LIST
+      TxFlags
+   
+   
+
+   
+   
+   
+
+
+

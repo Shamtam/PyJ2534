@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>PyJ2534.dll &mdash; PyJ2534  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="PyJ2534.error" href="PyJ2534.error.html" />
+    <link rel="prev" title="PyJ2534.define" href="PyJ2534.define.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyJ2534
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick-start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="PyJ2534.html">PyJ2534</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="PyJ2534.define.html">PyJ2534.define</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">PyJ2534.dll</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyJ2534.error.html">PyJ2534.error</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyJ2534</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="PyJ2534.html">PyJ2534</a> &raquo;</li>
+        
+      <li>PyJ2534.dll</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/source/api/PyJ2534.dll.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-PyJ2534.dll">
+<span id="pyj2534-dll"></span><h1>PyJ2534.dll<a class="headerlink" href="#module-PyJ2534.dll" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a Python-native implementation of the J2534-1 API.</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#PyJ2534.dll.get_interfaces" title="PyJ2534.dll.get_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_interfaces</span></code></a>()</p></td>
+<td><p>Enumerate all registered J2534 04.04 Pass-Thru interface DLLs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#PyJ2534.dll.load_interface" title="PyJ2534.dll.load_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_interface</span></code></a>(dll_path)</p></td>
+<td><p>Load a J2534 DLL.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#PyJ2534.dll.J2534Dll" title="PyJ2534.dll.J2534Dll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">J2534Dll</span></code></a>(dll_path)</p></td>
+<td><p>Wrapper around a J2534-1 DLL.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt id="PyJ2534.dll.get_interfaces">
+<code class="sig-prename descclassname"><span class="pre">PyJ2534.dll.</span></code><code class="sig-name descname"><span class="pre">get_interfaces</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.get_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumerate all registered J2534 04.04 Pass-Thru interface DLLs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>A dict mapping display names of any registered J2534
+Pass-Thru DLLs to their absolute filepath.</p>
+<p>The name can be used in user-facing GUI elements to allow
+selection of a particular Pass-Thru device, and filepath can
+be passed to <a class="reference internal" href="#PyJ2534.dll.load_interface" title="PyJ2534.dll.load_interface"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_interface()</span></code></a> to instantiate a
+<a class="reference internal" href="#PyJ2534.dll.J2534Dll" title="PyJ2534.dll.J2534Dll"><code class="xref py py-class docutils literal notranslate"><span class="pre">J2534Dll</span></code></a> wrapping the desired DLL.</p>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PyJ2534.dll.load_interface">
+<code class="sig-prename descclassname"><span class="pre">PyJ2534.dll.</span></code><code class="sig-name descname"><span class="pre">load_interface</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dll_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.load_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a J2534 DLL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dll_path</strong> (<em>str</em>) – Absolute filepath to the DLL to load</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A wrapper around the supplied DLL</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#PyJ2534.dll.J2534Dll" title="PyJ2534.dll.J2534Dll"><code class="xref py py-class docutils literal notranslate"><span class="pre">J2534Dll</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="PyJ2534.dll.J2534Dll">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">PyJ2534.dll.</span></code><code class="sig-name descname"><span class="pre">J2534Dll</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dll_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper around a J2534-1 DLL.</p>
+<p>Refer to the J2534-1 API specification for more information.</p>
+<p>All functions raise a <a class="reference internal" href="PyJ2534.error.html#PyJ2534.error.J2534Error" title="PyJ2534.error.J2534Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">J2534Error</span></code></a> if an error occurs.</p>
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dll_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate a wrapper to the DLL at the given filepath.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruOpen">
+<code class="sig-name descname"><span class="pre">PassThruOpen</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruOpen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the Pass-Thru device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Handle to the opened device</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruClose">
+<code class="sig-name descname"><span class="pre">PassThruClose</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruClose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the Pass-Thru device</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device_id</strong> (<em>int</em>) – Handle to the previously opened device</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruConnect">
+<code class="sig-name descname"><span class="pre">PassThruConnect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruConnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establish a Pass-Thru connection using the given device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device_id</strong> (<em>int</em>) – Handle to the previously opened device</p></li>
+<li><p><strong>protocol</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.ProtocolID" title="PyJ2534.define.ProtocolID"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolID</span></code></a>) – Desired protocol</p></li>
+<li><p><strong>flags</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.ProtocolFlags" title="PyJ2534.define.ProtocolFlags"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolFlags</span></code></a>) – Connection flags</p></li>
+<li><p><strong>baud</strong> (<em>int</em>) – Desired baud rate</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Handle to the opened channel</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruDisconnect">
+<code class="sig-name descname"><span class="pre">PassThruDisconnect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruDisconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the specified Pass-Thru channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruReadMsgs">
+<code class="sig-name descname"><span class="pre">PassThruReadMsgs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_msgs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruReadMsgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read messages from the specified channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>num_msgs</strong> (<em>int</em>) – Number of messages to attempt to read.</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – <p>Read timeout in ms, or None.</p>
+<p>If None, then this function will return up to
+<code class="docutils literal notranslate"><span class="pre">num_msgs</span></code> from the receive buffer (or nothing) and
+return immediately.</p>
+<p>Otherwise, this function will return either when the
+timeout has expired, an error occurs, or the specified
+number of messages has been read.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>list of <a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyJ2534.define.PASSTHRU_MSG</span></code></a>
+instances.</p>
+<p>If no timeout is specified, up to <code class="docutils literal notranslate"><span class="pre">num_msgs</span></code> messages from
+the receive buffer are returned immediately.</p>
+<p>Otherwise, this function will return when <code class="docutils literal notranslate"><span class="pre">num_msgs</span></code>
+messages have been read from the receive buffer, or raises
+a timeout :class:.`J2534Error` if the timeout lapses before
+<code class="docutils literal notranslate"><span class="pre">num_msgs</span></code> messages have been read.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruWriteMsgs">
+<code class="sig-name descname"><span class="pre">PassThruWriteMsgs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruWriteMsgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write messages to the specified channel.</p>
+<p>Returns the number of messages successfully transmitted
+(non-zero timeout) or queued (no timeout).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>msgs</strong> (<em>list</em>) – list of <a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code></a> instances</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – Write timeout in ms, or None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Number of successfully transmitted/queued messages.</p>
+<p>If no timeout is specified, the number of messages queued
+into the write buffer is returned immediately.</p>
+<p>Otherwise, the number of transmitted messages is returned,
+or a timeout :class:.`J2534Error` is raised if the timeout
+lapses before all provided messages have been transmitted.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruStartPeriodicMsg">
+<code class="sig-name descname"><span class="pre">PassThruStartPeriodicMsg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruStartPeriodicMsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queue the specified message for periodic transmission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code></a>) – Message to be queued</p></li>
+<li><p><strong>interval</strong> (<em>int</em>) – Period of transmissions, in ms. Valid intervals are
+between 5-65535ms</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Handle to the periodic message</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruStopPeriodicMsg">
+<code class="sig-name descname"><span class="pre">PassThruStopPeriodicMsg</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruStopPeriodicMsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the transmission of the specified message</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>msg_id</strong> (<em>int</em>) – Handle to the periodic message to stop</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruStartMsgFilter">
+<code class="sig-name descname"><span class="pre">PassThruStartMsgFilter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flow_msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruStartMsgFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure filtering for messages on the specified channel.</p>
+<p>Keywords are to be specified as required. See the SAE J2534-1
+recommended practices document for more information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>filter_type</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.FilterType" title="PyJ2534.define.FilterType"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilterType</span></code></a>) – Type of filter</p></li>
+<li><p><strong>mask_msg</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code></a>) – Mask message</p></li>
+<li><p><strong>pattern_msg</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code>) – Pattern message</p></li>
+<li><p><strong>flow_msg</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code>) – ignored when <code class="docutils literal notranslate"><span class="pre">filter_type</span></code> is
+<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.FilterType.PASS_FILTER" title="PyJ2534.define.FilterType.PASS_FILTER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">PASS_FILTER</span></code></a> or
+<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.FilterType.BLOCK_FILTER" title="PyJ2534.define.FilterType.BLOCK_FILTER"><code class="xref py py-attr docutils literal notranslate"><span class="pre">BLOCK_FILTER</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Handle to the created filter.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruStopMsgFilter">
+<code class="sig-name descname"><span class="pre">PassThruStopMsgFilter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruStopMsgFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the specified filter from the specified channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>filter_id</strong> (<em>int</em>) – Handle to the periodic message to stop</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruSetProgrammingVoltage">
+<code class="sig-name descname"><span class="pre">PassThruSetProgrammingVoltage</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruSetProgrammingVoltage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the programming voltage on the specified pin on the specified device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device_id</strong> (<em>int</em>) – Handle to the previously opened device</p></li>
+<li><p><strong>pin_number</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.ProgrammingPin" title="PyJ2534.define.ProgrammingPin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProgrammingPin</span></code></a>) – Pin to set</p></li>
+<li><p><strong>voltage</strong> (<em>int</em>) – Voltage to apply to the pin. The voltage can either
+directly specified in mV, or via the
+<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.ProgrammingVoltage" title="PyJ2534.define.ProgrammingVoltage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProgrammingVoltage</span></code></a> enumeration for cases where
+it’s desired to switch off the voltage or short the pin
+to GND. Acceptable ranges are between 5000 and 20000.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruReadVersion">
+<code class="sig-name descname"><span class="pre">PassThruReadVersion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruReadVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get version information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device_id</strong> (<em>int</em>) – Handle to the previously opened device</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>3-tuple of versions: (device firmware, DLL, and API)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruGetLastError">
+<code class="sig-name descname"><span class="pre">PassThruGetLastError</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruGetLastError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last error message generated by the interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Error message</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlGetConfig">
+<code class="sig-name descname"><span class="pre">PassThruIoctlGetConfig</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlGetConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get protocol configuration parameters for the given channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>params</strong> (<em>list</em>) – list of <a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.IoctlParameter" title="PyJ2534.define.IoctlParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">IoctlParameter</span></code></a> to retrieve values of</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict mapping the requested <a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.IoctlParameter" title="PyJ2534.define.IoctlParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">IoctlParameter</span></code></a> to
+their currently set int values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlSetConfig">
+<code class="sig-name descname"><span class="pre">PassThruIoctlSetConfig</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlSetConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set protocol configuration parameters for the given channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Mapping of <a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.IoctlParameter" title="PyJ2534.define.IoctlParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">IoctlParameter</span></code></a> to desired values</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlReadVbatt">
+<code class="sig-name descname"><span class="pre">PassThruIoctlReadVbatt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlReadVbatt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the voltage at pin 16 of the J1962 connector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device_id</strong> (<em>int</em>) – Handle to the previously opened device</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pin 16 voltage, in mV</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlReadProgVoltage">
+<code class="sig-name descname"><span class="pre">PassThruIoctlReadProgVoltage</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlReadProgVoltage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the programming voltage of the Pass-Thru device.</p>
+<p>Returns an <cite>int</cite> indicating the voltage in mV</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device_id</strong> (<em>int</em>) – Handle to the previously opened device</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Programming voltage, in mV</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlFiveBaudInit">
+<code class="sig-name descname"><span class="pre">PassThruIoctlFiveBaudInit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlFiveBaudInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiate a five-baud initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>addr</strong> (<em>int</em>) – Target address for initialization</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The response from the ECU</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlFastInit">
+<code class="sig-name descname"><span class="pre">PassThruIoctlFastInit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlFastInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiate a fast initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code></a>) – Message to be sent to the ECU for initialization.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If a response is expected, a
+<a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code></a> containing the response from the ECU,
+<code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="PyJ2534.define.html#PyJ2534.define.PASSTHRU_MSG" title="PyJ2534.define.PASSTHRU_MSG"><code class="xref py py-class docutils literal notranslate"><span class="pre">PASSTHRU_MSG</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlClearTxBuffer">
+<code class="sig-name descname"><span class="pre">PassThruIoctlClearTxBuffer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlClearTxBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the transmit messages queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlClearRxBuffer">
+<code class="sig-name descname"><span class="pre">PassThruIoctlClearRxBuffer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlClearRxBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the received messages queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlClearPeriodicMsgs">
+<code class="sig-name descname"><span class="pre">PassThruIoctlClearPeriodicMsgs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlClearPeriodicMsgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all configured periodic messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlClearMsgFilters">
+<code class="sig-name descname"><span class="pre">PassThruIoctlClearMsgFilters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlClearMsgFilters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all configured filters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlClearFunctMsgLookupTable">
+<code class="sig-name descname"><span class="pre">PassThruIoctlClearFunctMsgLookupTable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlClearFunctMsgLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the functional message look-up table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlAddToFunctMsgLookupTable">
+<code class="sig-name descname"><span class="pre">PassThruIoctlAddToFunctMsgLookupTable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlAddToFunctMsgLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add addresses to the functional message look-up table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>addrs</strong> (<em>list</em>) – list of int containing the addresses to be added</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyJ2534.dll.J2534Dll.PassThruIoctlDeleteFromFunctMsgLookupTable">
+<code class="sig-name descname"><span class="pre">PassThruIoctlDeleteFromFunctMsgLookupTable</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyJ2534.dll.J2534Dll.PassThruIoctlDeleteFromFunctMsgLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete addresses to the functional message look-up table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>int</em>) – Handle to the previously opened channel</p></li>
+<li><p><strong>addrs</strong> (<em>list</em>) – list of int containing the addresses to be deleted</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="PyJ2534.error.html" class="btn btn-neutral float-right" title="PyJ2534.error" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="PyJ2534.define.html" class="btn btn-neutral float-left" title="PyJ2534.define" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Shamit Som.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
