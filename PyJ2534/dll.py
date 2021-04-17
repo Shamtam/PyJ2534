@@ -364,7 +364,7 @@ class J2534Dll(object):
 
             Otherwise, this function will return when ``num_msgs``
             messages have been read from the receive buffer, or raises
-            a timeout :class:.`J2534Error` if the timeout lapses before
+            a timeout :class:`.J2534Error` if the timeout lapses before
             ``num_msgs`` messages have been read.
         """
         Msg = (PASSTHRU_MSG*num_msgs)()
@@ -403,7 +403,7 @@ class J2534Dll(object):
             into the write buffer is returned immediately.
 
             Otherwise, the number of transmitted messages is returned,
-            or a timeout :class:.`J2534Error` is raised if the timeout
+            or a timeout :class:`.J2534Error` is raised if the timeout
             lapses before all provided messages have been transmitted.
         """
         Msg = (PASSTHRU_MSG*len(msgs))(*msgs)
