@@ -330,7 +330,7 @@ instances.</p>
 the receive buffer are returned immediately.</p>
 <p>Otherwise, this function will return when <code class="docutils literal notranslate"><span class="pre">num_msgs</span></code>
 messages have been read from the receive buffer, or raises
-a timeout :class:.`J2534Error` if the timeout lapses before
+a timeout <a class="reference internal" href="PyJ2534.error.html#PyJ2534.error.J2534Error" title="PyJ2534.error.J2534Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">J2534Error</span></code></a> if the timeout lapses before
 <code class="docutils literal notranslate"><span class="pre">num_msgs</span></code> messages have been read.</p>
 </p>
 </dd>
@@ -359,7 +359,7 @@ a timeout :class:.`J2534Error` if the timeout lapses before
 <p>If no timeout is specified, the number of messages queued
 into the write buffer is returned immediately.</p>
 <p>Otherwise, the number of transmitted messages is returned,
-or a timeout :class:.`J2534Error` is raised if the timeout
+or a timeout <a class="reference internal" href="PyJ2534.error.html#PyJ2534.error.J2534Error" title="PyJ2534.error.J2534Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">J2534Error</span></code></a> is raised if the timeout
 lapses before all provided messages have been transmitted.</p>
 </p>
 </dd>
